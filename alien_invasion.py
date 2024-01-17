@@ -5,6 +5,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour"""
@@ -19,6 +20,9 @@ class AlienInvasion:
         pygame.display.set_caption('Alien Invasion')
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def run_game(self):
         '''Start the main loop of the game'''
@@ -29,9 +33,7 @@ class AlienInvasion:
             self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
-            
 
-    
     def _check_events(self):
         '''Responds to keypresses and mouse events'''
         for event in pygame.event.get():
@@ -87,18 +89,45 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet) 
 
-        
-
     def _update_screen(self):
         '''Update images on screen and flip to the new screen'''
         self.screen.fill(self.settings.bg_colour)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
         pygame.display.flip()
+    
+    def _create_fleet(self):
+        """ Create a fleet of Aliens """
+        #Create an alien and keep adding aliens until there is no room left
+        #Spacing between aliens is one alien width and one alien height.
 
+
+        #Make an alien
+        alien = Alien(self)
+        alien_width, alien_height = alien.rect.size
+
+        current_x, current_y = alien_width, alien_height
+        while current_y < (self.settings.screen_height - 6*alien_height):
+            while current_x < (self.settings.screen_width - 2*alien_width):
+                self.__create_alien(current_x,current_y)
+                current_x += 2 * alien_width
+
+            # Finished a row, reset x value and increment the y value
+            current_x = alien_width
+            current_y += 2*alien_height
+    
+    def __create_alien(self, x_position, y_position):
+        """ Create an alien and place it in the row """
+        new_alien = Alien(self)
+        new_alien.x = x_position 
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien) 
+
+
+        
 if __name__ == "__main__":
     ai = AlienInvasion()
     ai.run_game()
-    
-    
