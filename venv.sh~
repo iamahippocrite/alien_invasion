@@ -1,0 +1,7 @@
+#!/bin/bash
+
+currentDirectory=${PWD##*/}
+venv="venv"
+venvname="$venv$currentDirectory"
+command=`. ${PYENV_ROOT}/versions/$venvnames/bin/activate` 
+echo $command
