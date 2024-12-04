@@ -1,5 +1,4 @@
 """This is a module for the Alien Class."""
-
 import pygame
 from pygame.sprite import Sprite
 

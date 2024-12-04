@@ -18,17 +18,15 @@ class AlienInvasion:
     def __init__(self):
         """Initialize the game and create its resources."""
         pygame.init()
-
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         self.fullscreen_status = 1
         self.screen_width = self.settings.screen_width
         self.screen_height = self.settings.screen_height
+        self.size = pygame.RESIZABLE
         self.screen = pygame.display.set_mode((self.screen_width,
-                                               self.screen_height), flags=pygame.SCALED, vsync=1)
+                                               self.screen_height), self.size)
         pygame.display.set_caption('Alien Invasion')
-
-        self.bg_image = pygame.image.load("images/space_bg.jpg")
         # Create an instance to keep track of the Game's stats and a scoreboard
         self.stats = GameStats(self)
         self.sb = Scoreboard(self)
@@ -205,8 +203,7 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Update images on screen and flip to the new screen."""
-        # self.screen.fill(self.settings.bg_colour)
-        self.screen.blit(self.bg_image, (0, 0))
+        self.screen.fill(self.settings.bg_colour)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
